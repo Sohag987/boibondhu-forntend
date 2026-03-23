@@ -9,7 +9,7 @@ const Toast = ({ message }) => (
 );
 
 const Login = () => {
-  const API = import.meta.vite.env.VITE_API_URL;
+  const API = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState(null);
