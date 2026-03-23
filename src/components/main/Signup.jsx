@@ -9,6 +9,7 @@ const Toast = ({ message }) => (
 );
 
 const Signup = () => {
+  const API = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     first_name: "",
@@ -37,7 +38,7 @@ const Signup = () => {
     if (picture) data.append("picture", picture);
 
     try {
-      await axios.post("http://127.0.0.1:8000/register/", data, {
+      await axios.post(`${API}/register/`, data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

@@ -9,6 +9,7 @@ const Toast = ({ message }) => (
 );
 
 const SellForm = () => {
+  const API = import.meta.env.VITE_API_URL;
   const navigate  = useNavigate();
   const [formData, setFormData] = useState({
     book_name  : '',
@@ -45,7 +46,7 @@ const SellForm = () => {
     if (picture3) data.append('picture3', picture3);
 
     try {
-      await axios.post('http://127.0.0.1:8000/book-for-sell/', data, {
+      await axios.post(`${API}/book-for-sell/`, data, {
         headers: {
           'Content-Type'  : 'multipart/form-data',
           'Authorization' : `Bearer ${token}`,

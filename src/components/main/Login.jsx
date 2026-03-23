@@ -9,6 +9,7 @@ const Toast = ({ message }) => (
 );
 
 const Login = () => {
+  const API = import.meta.vite.env.VITE_API_URL;
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState(null);
@@ -25,7 +26,7 @@ const Login = () => {
     setError(null);
 
     try {
-      const res = await axios.post("http://127.0.0.1:8000/login/", formData);
+      const res = await axios.post(`${API}/login/`, formData);
 
       localStorage.setItem("access", res.data.access);
       localStorage.setItem("refresh", res.data.refresh);

@@ -8,6 +8,7 @@ const Toast = ({ message }) => (
 )
 
 const Contact = () => {
+  const API = import.meta.env.VITE_API_URL;
   const [formData, setFormData] = useState({
     name: '', email: '', subject: '', message: ''
   })
@@ -25,7 +26,7 @@ const Contact = () => {
     setError(null)
 
     try {
-      await axios.post('http://127.0.0.1:8000/contact/', formData)
+      await axios.post(`${API}/contact/`, formData)
       setFormData({ name: '', email: '', subject: '', message: '' })
       setShowToast(true)
       setTimeout(() => setShowToast(false), 2000)

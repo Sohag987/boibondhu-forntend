@@ -3,12 +3,14 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
 const Toast = ({ message }) => (
+
     <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-[#2C2416] text-[#EDE4D8] text-xs px-5 py-3 rounded-xl shadow-lg animate-bounce">
         {message}
     </div>
 )
 
 const DonateForm = () => {
+    const API = import.meta.env.VITE_API_URL;
     const navigate = useNavigate()
     const [formData, setFormData] = useState({
         book_name: '',
@@ -46,7 +48,7 @@ const DonateForm = () => {
         }
 
         try {
-            await axios.post('http://localhost:8000/book-for-fund/', data, {
+            await axios.post(`${API}/book-for-fund/`, data, {
                 headers: {
 
                     'Authorization': `Bearer ${token}`,

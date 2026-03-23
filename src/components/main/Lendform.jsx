@@ -9,6 +9,7 @@ const Toast = ({ message }) => (
 )
 
 const LendForm = () => {
+  const API = import.meta.env.VITE_API_URL;
   const navigate = useNavigate()
   const [formData, setFormData] = useState({
     book_name  : '',
@@ -42,7 +43,7 @@ const LendForm = () => {
     if (picture2) data.append('picture2', picture2)
 
     try {
-      await axios.post('http://localhost:8000/book-for-lend/', data, {
+      await axios.post(`${API}/book-for-lend/`, data, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },

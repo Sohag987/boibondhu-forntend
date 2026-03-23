@@ -3,6 +3,7 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 
 const BorrowBooks = () => {
+  const API = import.meta.env.VITE_API_URL;
   const [books,         setBooks]         = useState([])
   const [loading,       setLoading]       = useState(true)
   const [error,         setError]         = useState(null)
@@ -16,7 +17,7 @@ const BorrowBooks = () => {
   const fetchBooks = useCallback(async (query = '', page = 1) => {
     try {
       query ? setSearchLoading(true) : setLoading(true)
-      const { data } = await axios.get('http://localhost:8000/book-for-lend/', {
+      const { data } = await axios.get(`${API}/book-for-lend/`, {
         params: {
           ...(query ? { search: query } : {}),
           page,

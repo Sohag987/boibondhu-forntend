@@ -13,7 +13,7 @@ const SingleFund = () => {
     if (!slug) return;
     const fetchBook = async () => {
       try {
-        const res = await axios.get(`http://localhost:8000/book-for-fund/${slug}/`);
+        const res = await axios.get(`${API}/book-for-fund/${slug}/`);
         setBook(res.data);
       } catch (err) {
         setError(err.message);

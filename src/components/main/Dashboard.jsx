@@ -9,6 +9,7 @@ const Toast = ({ message }) => (
 )
 
 const Dashboard = () => {
+  const API = import.meta.env.VITE_API_URL;
   const navigate  = useNavigate()
   const [data,       setData]       = useState(null)
   const [loading,    setLoading]    = useState(true)
@@ -26,7 +27,7 @@ const Dashboard = () => {
 
   const fetchDashboard = async () => {
     try {
-      const res = await axios.get('http://localhost:8000/dashboard/', {
+      const res = await axios.get(`${API}/dashboard/`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       setData(res.data)

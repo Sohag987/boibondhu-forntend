@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 const Allsell = () => {
+    const API = import.meta.env.VITE_API_URL;
     const [sellbooks,     setSellbooks]     = useState([]);
     const [loading,       setLoading]       = useState(true);
     const [error,         setError]         = useState(null);
@@ -16,7 +17,7 @@ const Allsell = () => {
     const fetchBooks = useCallback(async (query = '', page = 1) => {
         try {
             query ? setSearchLoading(true) : setLoading(true);
-            const { data } = await axios.get('http://127.0.0.1:8000/book-for-sell/', {
+            const { data } = await axios.get(`${API}/book-for-sell/`, {
                 params: {
                     ...(query ? { search: query } : {}),
                     page,

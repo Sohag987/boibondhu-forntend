@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 const BorrowDetails = () => {
+  const API = import.meta.env.VITE_API_URL;
   const { slug } = useParams();
   const [book, setBook]           = useState(null);
   const [loading, setLoading]     = useState(true);
@@ -13,7 +14,7 @@ const BorrowDetails = () => {
     if (!slug) return;
     const fetchBook = async () => {
       try {
-        const res = await axios.get(`http://localhost:8000/book-for-lend/${slug}/`);
+        const res = await axios.get(`${API}/book-for-lend/${slug}/`);
         setBook(res.data);
       } catch (err) {
         setError(err.message);
