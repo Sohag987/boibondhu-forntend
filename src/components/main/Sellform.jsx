@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const Toast = ({ message }) => (
-  <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-[#2C2416] text-[#EDE4D8] text-xs px-5 py-3 rounded-xl shadow-lg animate-bounce">
+  <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-[#2C2416] text-[#EDE4D8] text-xs px-5 py-3 rounded-xl shadow-lg animate-[slideDown_0.3s_ease-out]">
     {message}
   </div>
 );
@@ -26,6 +26,16 @@ const SellForm = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleFileChange = (pictureNumber, file) => {
+    if (pictureNumber === 1) {
+      setPicture1(file);
+    } else if (pictureNumber === 2) {
+      setPicture2(file);
+    } else if (pictureNumber === 3) {
+      setPicture3(file);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -54,20 +64,28 @@ const SellForm = () => {
       });
 
       setShowToast(true);
+      setLoading(false);
       setTimeout(() => {
-        setShowToast(false);
         navigate('/book-for-sell/');
       }, 2000);
 
     } catch (err) {
       setError(err.response?.data || 'Something went wrong');
-    } finally {
       setLoading(false);
+      setShowToast(false);
     }
   };
 
+  const pictures = [
+    { number: 1, label: 'Picture 1', state: picture1, setter: setPicture1 },
+    { number: 2, label: 'Picture 2', state: picture2, setter: setPicture2 },
+    { number: 3, label: 'Picture 3', state: picture3, setter: setPicture3 },
+  ];
+
   return (
-    <main className='min-h-screen bg-[#F5EFE8] px-8 py-8'>
+    <main className='min-h-screen bg-[#F5EFE8] px-4 sm:px-8 py-8'>
+
+      {showToast && <Toast message="Book listed successfully! Redirecting..." />}
 
       {/* Header */}
       <div className='mb-6 border-b border-[#C8B9A8] pb-4'>
@@ -75,8 +93,8 @@ const SellForm = () => {
         <p className='text-[#8C7B6E] text-xs mt-0.5'>Fill in the details to list your book for sale</p>
       </div>
 
-      <div className='max-w-xl mx-auto'>npm 
-        <div className='bg-[#EDE4D8] border border-[#C8B9A8] rounded-xl p-6 flex flex-col gap-4'>
+      <div className='max-w-xl mx-auto'>
+        <div className='bg-[#EDE4D8] border border-[#C8B9A8] rounded-xl p-4 sm:p-6 flex flex-col gap-4'>
 
           {/* Error */}
           {error && (
@@ -139,24 +157,47 @@ const SellForm = () => {
             />
           </div>
 
-          {/* Pictures */}
-          <div className='flex flex-col gap-2'>
+          {/* Pictures - Mobile Responsive */}
+          <div className='flex flex-col gap-3'>
             <label className='text-[#2C2416] text-xs font-medium'>
               Pictures <span className='text-[#8C7B6E] font-normal'>(up to 3)</span>
             </label>
-            {[
-              { label: 'Picture 1', setter: setPicture1 },
-              { label: 'Picture 2', setter: setPicture2 },
-              { label: 'Picture 3', setter: setPicture3 },
-            ].map((pic) => (
-              <div key={pic.label} className='flex items-center gap-2'>
-                <span className='text-[#8C7B6E] text-xs w-16'>{pic.label}</span>
-                <input
-                  type='file'
-                  accept='image/*'
-                  onChange={(e) => pic.setter(e.target.files[0])}
-                  className='flex-1 bg-[#F5EFE8] border border-[#C8B9A8] rounded-lg px-3 py-1.5 text-xs text-[#8C7B6E] file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:bg-[#2C2416] file:text-[#EDE4D8] hover:file:bg-[#4A3728] transition-colors duration-150 cursor-pointer'
-                />
+
+            {pictures.map((pic) => (
+              <div key={pic.label} className='flex flex-col gap-1'>
+                <span className='text-[#8C7B6E] text-xs'>{pic.label}</span>
+                <div className='relative'>
+                  <input
+                    type='file'
+                    id={`picture${pic.number}-upload`}
+                    accept='image/*'
+                    onChange={(e) => handleFileChange(pic.number, e.target.files[0])}
+                    className='hidden'
+                  />
+                  <label
+                    htmlFor={`picture${pic.number}-upload`}
+                    className='flex items-center justify-between bg-[#F5EFE8] border border-[#C8B9A8] rounded-lg px-3 py-2 cursor-pointer hover:border-[#8C7B6E] transition-colors duration-150'
+                  >
+                    <span className='text-sm text-[#8C7B6E] truncate pr-2'>
+                      {pic.state ? pic.state.name : 'Choose a file'}
+                    </span>
+                    <span className='flex-shrink-0 bg-[#2C2416] text-[#EDE4D8] text-xs px-3 py-1.5 rounded-md hover:bg-[#4A3728] transition-colors duration-150'>
+                      Browse
+                    </span>
+                  </label>
+                </div>
+                {pic.state && (
+                  <div className='flex items-center justify-between mt-1 text-xs text-[#8C7B6E]'>
+                    <span className='truncate'>{pic.state.name}</span>
+                    <button
+                      type='button'
+                      onClick={() => pic.setter(null)}
+                      className='ml-2 text-red-600 hover:text-red-700 flex-shrink-0'
+                    >
+                      Remove
+                    </button>
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -173,7 +214,18 @@ const SellForm = () => {
         </div>
       </div>
 
-      {showToast && <Toast message="Book listed successfully! Redirecting..." />}
+      <style>{`
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translate(-50%, -20px);
+          }
+          to {
+            opacity: 1;
+            transform: translate(-50%, 0);
+          }
+        }
+      `}</style>
 
     </main>
   );

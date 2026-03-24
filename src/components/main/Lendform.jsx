@@ -139,29 +139,29 @@ const LendForm = () => {
             </p>
           </div>
 
-          {/* Picture 1 */}
+          {/* ✅ Responsive Picture Section */}
           <div className='flex flex-col gap-2'>
             <label className='text-[#2C2416] text-xs font-medium'>
               Pictures <span className='text-[#8C7B6E] font-normal'>(up to 2)</span>
             </label>
-            <div className='flex items-center gap-2'>
-              <span className='text-[#8C7B6E] text-xs w-16'>Picture 1</span>
+
+            <div className='flex flex-col sm:flex-row sm:items-center gap-2'>
+              <span className='text-[#8C7B6E] text-xs sm:w-20'>Picture 1</span>
               <input
                 type='file'
                 accept='image/*'
                 onChange={(e) => setPicture1(e.target.files[0])}
-                className='flex-1 bg-[#F5EFE8] border border-[#C8B9A8] rounded-lg px-3 py-1.5 text-xs text-[#8C7B6E] file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:bg-[#2C2416] file:text-[#EDE4D8] hover:file:bg-[#4A3728] transition-colors duration-150 cursor-pointer'
+                className='w-full bg-[#F5EFE8] border border-[#C8B9A8] rounded-lg px-3 py-2 text-xs text-[#8C7B6E] file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:bg-[#2C2416] file:text-[#EDE4D8] hover:file:bg-[#4A3728] transition-colors duration-150 cursor-pointer'
               />
             </div>
 
-            {/* Picture 2 */}
-            <div className='flex items-center gap-2'>
-              <span className='text-[#8C7B6E] text-xs w-16'>Picture 2</span>
+            <div className='flex flex-col sm:flex-row sm:items-center gap-2'>
+              <span className='text-[#8C7B6E] text-xs sm:w-20'>Picture 2</span>
               <input
                 type='file'
                 accept='image/*'
                 onChange={(e) => setPicture2(e.target.files[0])}
-                className='flex-1 bg-[#F5EFE8] border border-[#C8B9A8] rounded-lg px-3 py-1.5 text-xs text-[#8C7B6E] file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:bg-[#2C2416] file:text-[#EDE4D8] hover:file:bg-[#4A3728] transition-colors duration-150 cursor-pointer'
+                className='w-full bg-[#F5EFE8] border border-[#C8B9A8] rounded-lg px-3 py-2 text-xs text-[#8C7B6E] file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:bg-[#2C2416] file:text-[#EDE4D8] hover:file:bg-[#4A3728] transition-colors duration-150 cursor-pointer'
               />
             </div>
           </div>

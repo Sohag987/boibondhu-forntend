@@ -3,8 +3,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
 const Toast = ({ message }) => (
-
-    <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-[#2C2416] text-[#EDE4D8] text-xs px-5 py-3 rounded-xl shadow-lg animate-bounce">
+    <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-[#2C2416] text-[#EDE4D8] text-xs px-5 py-3 rounded-xl shadow-lg animate-[slideDown_0.3s_ease-out]">
         {message}
     </div>
 )
@@ -25,6 +24,14 @@ const DonateForm = () => {
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value })
+    }
+
+    const handleFileChange = (pictureNumber, file) => {
+        if (pictureNumber === 1) {
+            setPicture1(file)
+        } else {
+            setPicture2(file)
+        }
     }
 
     const handleSubmit = async (e) => {
@@ -50,24 +57,25 @@ const DonateForm = () => {
         try {
             await axios.post(`${API}/book-for-fund/`, data, {
                 headers: {
-
                     'Authorization': `Bearer ${token}`,
                 },
             })
             setShowToast(true)
+            setLoading(false)
             setTimeout(() => {
-                setShowToast(false)
                 navigate('/donate/')
             }, 2000)
         } catch (err) {
             setError(err.response?.data || 'Something went wrong')
-        } finally {
             setLoading(false)
+            setShowToast(false)
         }
     }
 
     return (
-        <main className='min-h-screen bg-[#F5EFE8] px-8 py-8'>
+        <main className='min-h-screen bg-[#F5EFE8] px-4 sm:px-8 py-8'>
+
+            {showToast && <Toast message="Book listed for donation successfully!" />}
 
             {/* Header */}
             <div className='mb-8 border-b border-[#C8B9A8] pb-4'>
@@ -88,7 +96,7 @@ const DonateForm = () => {
             </div>
 
             <div className='max-w-xl mx-auto'>
-                <div className='bg-[#EDE4D8] border border-[#C8B9A8] rounded-xl p-6 flex flex-col gap-4'>
+                <div className='bg-[#EDE4D8] border border-[#C8B9A8] rounded-xl p-4 sm:p-6 flex flex-col gap-4'>
 
                     {/* Error */}
                     {error && (
@@ -141,33 +149,85 @@ const DonateForm = () => {
                         </p>
                     </div>
 
-                    {/* Pictures */}
-                    {/* Pictures */}
-                    <div className='flex flex-col gap-2'>
+                    {/* Pictures - Mobile Responsive */}
+                    <div className='flex flex-col gap-3'>
                         <label className='text-[#2C2416] text-xs font-medium'>
                             Pictures <span className='text-[#8C7B6E] font-normal'>(up to 2)</span>
                         </label>
 
-                        <div className='flex items-center gap-2'>
-                            <span className='text-[#8C7B6E] text-xs w-16'>Picture 1</span>
-                            <input
-                                type='file'
-                                accept='image/*'
-                                onChange={(e) => setPicture1(e.target.files[0])}
-                                className='flex-1 bg-[#F5EFE8] border border-[#C8B9A8] rounded-lg px-3 py-1.5 text-xs text-[#8C7B6E] file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:bg-[#2C2416] file:text-[#EDE4D8] hover:file:bg-[#4A3728] transition-colors duration-150 cursor-pointer'
-                            />
+                        {/* Picture 1 */}
+                        <div className='flex flex-col gap-1'>
+                            <span className='text-[#8C7B6E] text-xs'>Picture 1</span>
+                            <div className='relative'>
+                                <input
+                                    type='file'
+                                    id='picture1-upload'
+                                    accept='image/*'
+                                    onChange={(e) => handleFileChange(1, e.target.files[0])}
+                                    className='hidden'
+                                />
+                                <label
+                                    htmlFor='picture1-upload'
+                                    className='flex items-center justify-between bg-[#F5EFE8] border border-[#C8B9A8] rounded-lg px-3 py-2 cursor-pointer hover:border-[#8C7B6E] transition-colors duration-150'
+                                >
+                                    <span className='text-sm text-[#8C7B6E] truncate pr-2'>
+                                        {picture1 ? picture1.name : 'Choose a file'}
+                                    </span>
+                                    <span className='flex-shrink-0 bg-[#2C2416] text-[#EDE4D8] text-xs px-3 py-1.5 rounded-md hover:bg-[#4A3728] transition-colors duration-150'>
+                                        Browse
+                                    </span>
+                                </label>
+                            </div>
+                            {picture1 && (
+                                <div className='flex items-center justify-between mt-1 text-xs text-[#8C7B6E]'>
+                                    <span className='truncate'>{picture1.name}</span>
+                                    <button
+                                        type='button'
+                                        onClick={() => setPicture1(null)}
+                                        className='ml-2 text-red-600 hover:text-red-700 flex-shrink-0'
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
+                            )}
                         </div>
 
-                        <div className='flex items-center gap-2'>
-                            <span className='text-[#8C7B6E] text-xs w-16'>Picture 2</span>
-                            <input
-                                type='file'
-                                accept='image/*'
-                                onChange={(e) => setPicture2(e.target.files[0])}
-                                className='flex-1 bg-[#F5EFE8] border border-[#C8B9A8] rounded-lg px-3 py-1.5 text-xs text-[#8C7B6E] file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:bg-[#2C2416] file:text-[#EDE4D8] hover:file:bg-[#4A3728] transition-colors duration-150 cursor-pointer'
-                            />
+                        {/* Picture 2 */}
+                        <div className='flex flex-col gap-1'>
+                            <span className='text-[#8C7B6E] text-xs'>Picture 2</span>
+                            <div className='relative'>
+                                <input
+                                    type='file'
+                                    id='picture2-upload'
+                                    accept='image/*'
+                                    onChange={(e) => handleFileChange(2, e.target.files[0])}
+                                    className='hidden'
+                                />
+                                <label
+                                    htmlFor='picture2-upload'
+                                    className='flex items-center justify-between bg-[#F5EFE8] border border-[#C8B9A8] rounded-lg px-3 py-2 cursor-pointer hover:border-[#8C7B6E] transition-colors duration-150'
+                                >
+                                    <span className='text-sm text-[#8C7B6E] truncate pr-2'>
+                                        {picture2 ? picture2.name : 'Choose a file'}
+                                    </span>
+                                    <span className='flex-shrink-0 bg-[#2C2416] text-[#EDE4D8] text-xs px-3 py-1.5 rounded-md hover:bg-[#4A3728] transition-colors duration-150'>
+                                        Browse
+                                    </span>
+                                </label>
+                            </div>
+                            {picture2 && (
+                                <div className='flex items-center justify-between mt-1 text-xs text-[#8C7B6E]'>
+                                    <span className='truncate'>{picture2.name}</span>
+                                    <button
+                                        type='button'
+                                        onClick={() => setPicture2(null)}
+                                        className='ml-2 text-red-600 hover:text-red-700 flex-shrink-0'
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
+                            )}
                         </div>
-
                     </div>
 
                     {/* Submit */}
@@ -182,7 +242,18 @@ const DonateForm = () => {
                 </div>
             </div>
 
-            {showToast && <Toast message="Book listed for donation successfully!" />}
+            <style>{`
+                @keyframes slideDown {
+                    from {
+                        opacity: 0;
+                        transform: translate(-50%, -20px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translate(-50%, 0);
+                    }
+                }
+            `}</style>
 
         </main>
     )
