@@ -3,27 +3,37 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 const Allsell = () => {
-    const API = import.meta.env.VITE_API_URL;
-    const [sellbooks,     setSellbooks]     = useState([]);
-    const [loading,       setLoading]       = useState(true);
-    const [error,         setError]         = useState(null);
-    const [searchQuery,   setSearchQuery]   = useState('');
+    const API = 'http://144.79.133.207:8000';
+
+    const [sellbooks, setSellbooks] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const [searchQuery, setSearchQuery] = useState('');
     const [searchLoading, setSearchLoading] = useState(false);
-    const [currentPage,   setCurrentPage]   = useState(1);
-    const [totalCount,    setTotalCount]    = useState(0);
-    const [nextPage,      setNextPage]      = useState(null);
-    const [prevPage,      setPrevPage]      = useState(null);
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalCount, setTotalCount] = useState(0);
+    const [nextPage, setNextPage] = useState(null);
+    const [prevPage, setPrevPage] = useState(null);
 
     const fetchBooks = useCallback(async (query = '', page = 1) => {
         try {
-            query ? setSearchLoading(true) : setLoading(true);
+            setError(null);
+
+            if (query) {
+                setSearchLoading(true);
+            } else {
+                setLoading(true);
+            }
+
             const { data } = await axios.get(`${API}/book-for-sell/`, {
                 params: {
                     ...(query ? { search: query } : {}),
                     page,
                 }
             });
-            console.log('results:', data.results);
+
             setSellbooks(data.results);
             setTotalCount(data.count);
             setNextPage(data.next);
@@ -32,24 +42,27 @@ const Allsell = () => {
         } catch (err) {
             setError(err.message);
         } finally {
-            setLoading(false);
-            setSearchLoading(false);
+            if (query) {
+                setSearchLoading(false);
+            } else {
+                setLoading(false);
+            }
         }
     }, []);
 
-    
+    // 🔍 Debounced search (only resets page)
     useEffect(() => {
         const delay = setTimeout(() => {
             setCurrentPage(1);
-            fetchBooks(searchQuery, 1);
         }, 500);
+
         return () => clearTimeout(delay);
     }, [searchQuery]);
 
-    
+    // 📡 Single source of API call
     useEffect(() => {
         fetchBooks(searchQuery, currentPage);
-    }, [currentPage]);
+    }, [currentPage, searchQuery, fetchBooks]);
 
     const handlePrev = () => {
         if (prevPage) setCurrentPage((p) => p - 1);
@@ -87,12 +100,13 @@ const Allsell = () => {
                     </p>
                 </div>
 
-                {/* Search bar */}
+                {/* Search */}
                 <div className='flex items-center gap-2 bg-[#EDE4D8] border border-[#C8B9A8] rounded-lg px-3 py-2 focus-within:border-[#8C7B6E] transition-all duration-150'>
                     <svg className='w-3.5 h-3.5 shrink-0' viewBox='0 0 16 16' fill='none' stroke='#8C7B6E' strokeWidth='1.5'>
                         <circle cx='6.5' cy='6.5' r='4.5' />
                         <path d='M10 10L14 14' />
                     </svg>
+
                     <input
                         type='text'
                         value={searchQuery}
@@ -100,10 +114,11 @@ const Allsell = () => {
                         placeholder='Search by title or author...'
                         className='bg-transparent outline-none text-xs text-[#2C2416] placeholder-[#8C7B6E] w-40'
                     />
+
                     {searchQuery && (
                         <button
                             onClick={() => setSearchQuery('')}
-                            className='text-[#8C7B6E] hover:text-[#2C2416] transition-colors duration-150 text-xs'
+                            className='text-[#8C7B6E] hover:text-[#2C2416] text-xs'
                         >
                             ✕
                         </button>
@@ -118,7 +133,7 @@ const Allsell = () => {
                     <p className='text-[#8C7B6E] text-xs'>Try a different search term</p>
                     <button
                         onClick={() => setSearchQuery('')}
-                        className='mt-3 text-xs text-[#8C7B6E] hover:text-[#2C2416] underline transition-colors duration-150'
+                        className='mt-3 text-xs text-[#8C7B6E] hover:text-[#2C2416] underline'
                     >
                         Clear search
                     </button>
@@ -130,7 +145,7 @@ const Allsell = () => {
                 {sellbooks.map((book, index) => (
                     <li
                         key={book.id ?? index}
-                        className='bg-[#EDE4D8] border border-[#C8B9A8] rounded-xl p-4 flex flex-col gap-3 hover:border-[#8C7B6E] hover:shadow-sm transition-all duration-150'
+                        className='bg-[#EDE4D8] border border-[#C8B9A8] rounded-xl p-4 flex flex-col gap-3 hover:border-[#8C7B6E] hover:shadow-sm'
                     >
                         <div className='rounded-lg h-40 overflow-hidden border border-[#C8B9A8]'>
                             <Link to={`/book-for-sell/${book.slug}/`}>
@@ -142,17 +157,20 @@ const Allsell = () => {
                             </Link>
                         </div>
 
-                        <div className='flex flex-col gap-0.5'>
-                            <p className='text-[#2C2416] text-sm font-semibold leading-snug line-clamp-2'>
+                        <div>
+                            <p className='text-[#2C2416] text-sm font-semibold line-clamp-2'>
                                 {book.book_name}
                             </p>
                             <p className='text-[#8C7B6E] text-xs'>{book.author_name}</p>
                         </div>
 
-                        <div className='flex items-center justify-between mt-auto pt-2.5 border-t border-[#C8B9A8]'>
-                            <span className='text-[#2C2416] text-sm font-semibold'>{`${book.price} Taka`}</span>
+                        <div className='flex justify-between mt-auto pt-2 border-t border-[#C8B9A8]'>
+                            <span className='text-[#2C2416] text-sm font-semibold'>
+                                {book.price} Taka
+                            </span>
+
                             <Link to={`/book-for-sell/${book.slug}/`}>
-                                <button className='bg-[#2C2416] text-[#EDE4D8] text-xs px-3 py-1.5 rounded-lg hover:bg-[#4A3728] transition-colors duration-150'>
+                                <button className='bg-[#2C2416] text-[#EDE4D8] text-xs px-3 py-1.5 rounded-lg hover:bg-[#4A3728]'>
                                     Contact Seller
                                 </button>
                             </Link>
@@ -163,11 +181,12 @@ const Allsell = () => {
 
             {/* Pagination */}
             {(prevPage || nextPage) && (
-                <div className='flex items-center justify-center gap-4 mt-10 pt-6 border-t border-[#C8B9A8]'>
+                <div className='flex justify-center gap-4 mt-10 pt-6 border-t border-[#C8B9A8]'>
+
                     <button
                         onClick={handlePrev}
                         disabled={!prevPage}
-                        className='text-xs px-4 py-2 rounded-lg border border-[#C8B9A8] text-[#6B5C4E] hover:bg-[#EDE4D8] transition-colors duration-150 disabled:opacity-40 disabled:cursor-not-allowed'
+                        className='text-xs px-4 py-2 rounded-lg border border-[#C8B9A8] disabled:opacity-40'
                     >
                         ← Previous
                     </button>
@@ -179,10 +198,11 @@ const Allsell = () => {
                     <button
                         onClick={handleNext}
                         disabled={!nextPage}
-                        className='text-xs px-4 py-2 rounded-lg border border-[#C8B9A8] text-[#6B5C4E] hover:bg-[#EDE4D8] transition-colors duration-150 disabled:opacity-40 disabled:cursor-not-allowed'
+                        className='text-xs px-4 py-2 rounded-lg border border-[#C8B9A8] disabled:opacity-40'
                     >
                         Next →
                     </button>
+
                 </div>
             )}
 

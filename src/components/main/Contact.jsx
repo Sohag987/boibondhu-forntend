@@ -8,7 +8,7 @@ const Toast = ({ message }) => (
 )
 
 const Contact = () => {
-  const API = import.meta.env.VITE_API_URL;
+  const API = 'http://144.79.133.207:8000';
   const [formData, setFormData] = useState({
     name: '', email: '', subject: '', message: ''
   })

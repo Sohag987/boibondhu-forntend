@@ -9,7 +9,7 @@ const Toast = ({ message }) => (
 )
 
 const LendForm = () => {
-  const API = import.meta.env.VITE_API_URL;
+  const API = 'http://144.79.133.207:8000';
   const navigate = useNavigate()
   const [formData, setFormData] = useState({
     book_name  : '',
