@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 const SingleFund = () => {
-  const API = 'http://127.0.0.1:8000';
+  const API = import.meta.env.VITE_API_URL;
   const { slug } = useParams();
   const [book, setBook]           = useState(null);
   const [loading, setLoading]     = useState(true);

@@ -9,7 +9,7 @@ const Toast = ({ message }) => (
 )
 
 const Dashboard = () => {
-  const API = 'http://144.79.133.207:8000';
+  const API = import.meta.env.VITE_API_URL;
   const navigate  = useNavigate()
   const [data,       setData]       = useState(null)
   const [loading,    setLoading]    = useState(true)

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 const Allsell = () => {
-    const API = 'http://144.79.133.207:8000';
+    const API = import.meta.env.VITE_API_URL;
 
     const [sellbooks, setSellbooks] = useState([]);
     const [loading, setLoading] = useState(true);
