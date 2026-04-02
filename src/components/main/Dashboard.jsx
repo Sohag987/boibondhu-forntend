@@ -56,7 +56,7 @@ const Dashboard = () => {
     if (picture) form.append('picture', picture)
 
     try {
-      await axios.patch('http://localhost:8000/dashboard/', form, {
+      await axios.patch(`${API}/dashboard/`, form, {
         headers: { Authorization: `Bearer ${token}` }
       })
       setToastMsg('Profile updated successfully!')
@@ -71,9 +71,9 @@ const Dashboard = () => {
 
   const handleDelete = async (type, slug) => {
     const urls = {
-      sell: `http://localhost:8000/book-for-sell/${slug}/`,
-      fund: `http://localhost:8000/book-for-fund/${slug}/`,
-      lend: `http://localhost:8000/book-for-lend/${slug}/`,
+      sell: `${API}/book-for-sell/${slug}/`,
+      fund: `${API}/book-for-fund/${slug}/`,
+      lend: `${API}/book-for-lend/${slug}/`,
     }
     if (!window.confirm('Are you sure you want to delete this book?')) return
     try {
@@ -138,7 +138,7 @@ const Dashboard = () => {
             <div className='flex flex-col items-center gap-3 border-b border-[#C8B9A8] pb-4'>
               {data.user.picture ? (
                 <img
-                  src={data.user.picture}
+                  src={`${API}${data.user.picture}`}
                   alt={data.user.first_name}
                   className='w-16 h-16 rounded-full object-cover border border-[#C8B9A8]'
                 />
