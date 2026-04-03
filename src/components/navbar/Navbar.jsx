@@ -62,12 +62,12 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Link to="/login">
+                <Link to="/login/">
                   <button className='text-xs text-[#6B5C4E] px-3 py-1.5 rounded-lg hover:bg-[#D9CBBF] hover:text-[#2C2416] transition-all duration-150'>
                     Log in
                   </button>
                 </Link>
-                <Link to="/signup">
+                <Link to="/signup/">
                   <button className='text-xs bg-[#2C2416] text-[#EDE4D8] px-3 py-1.5 rounded-lg hover:bg-[#4A3728] transition-colors duration-150'>
                     Sign up
                   </button>
@@ -95,27 +95,35 @@ const Navbar = () => {
             <Link to="/" onClick={() => setMenuOpen(false)}>
               <p className='px-3 py-2 rounded-lg hover:bg-[#D9CBBF] hover:text-[#2C2416] transition-all duration-150'>Home</p>
             </Link>
-            <Link to ='/about/'>
+            <Link to ='/about/' onClick={() => setMenuOpen(false)}>
             <p className='px-3 py-2 rounded-lg hover:bg-[#D9CBBF] hover:text-[#2C2416] transition-all duration-150 cursor-pointer'>About</p>
-            </Link>
+            </Link> 
+            <Link to ="/contact/" onClick={() => setMenuOpen(false)}>
             <p className='px-3 py-2 rounded-lg hover:bg-[#D9CBBF] hover:text-[#2C2416] transition-all duration-150 cursor-pointer'>Contact</p>
-            <p className='px-3 py-2 rounded-lg hover:bg-[#D9CBBF] hover:text-[#2C2416] transition-all duration-150 cursor-pointer'>Cart</p>
+            </Link>
+            <Link to ="/library/" onClick={() => setMenuOpen(false)}>
+            <p className='px-3 py-2 rounded-lg hover:bg-[#D9CBBF] hover:text-[#2C2416] transition-all duration-150 cursor-pointer'>Library</p>
+            
+            </Link>
             <Link to="/book-for-sell/" onClick={() => setMenuOpen(false)}>
               <p className='px-3 py-2 rounded-lg hover:bg-[#D9CBBF] hover:text-[#2C2416] transition-all duration-150'>Buy</p>
             </Link>
             <Link to="/sell/" onClick={() => setMenuOpen(false)}>
               <p className='px-3 py-2 rounded-lg hover:bg-[#D9CBBF] hover:text-[#2C2416] transition-all duration-150'>Sell</p>
             </Link>
-            <p className='px-3 py-2 rounded-lg hover:bg-[#D9CBBF] hover:text-[#2C2416] transition-all duration-150 cursor-pointer'>Library</p>
+            <Link to="/donate" onClick={() => setMenuOpen(false)}>
             <p className='px-3 py-2 rounded-lg hover:bg-[#D9CBBF] hover:text-[#2C2416] transition-all duration-150 cursor-pointer'>Donate</p>
+            </Link>
 
             {/* Mobile Auth */}
             <div className='flex flex-col gap-2 mt-3 pt-3 border-t border-[#C8B9A8]'>
               {token ? (
                 <>
+                  <Link to="/dashboard/" onClick={() => setMenuOpen(false)}>
                   <span className='text-[#2C2416] text-xs font-medium px-3 py-1.5 bg-[#D9CBBF] border border-[#C8B9A8] rounded-lg text-center'>
                     {username}
                   </span>
+                  </Link>
                   <button
                     onClick={handleLogout}
                     className='text-xs text-[#8C7B6E] px-3 py-2 rounded-lg hover:bg-[#D9CBBF] hover:text-[#2C2416] transition-all duration-150 text-left'
@@ -125,7 +133,7 @@ const Navbar = () => {
                 </>
               ) : (
                 <>
-                  <Link to="/login" onClick={() => setMenuOpen(false)}>
+                  <Link to="/login/" onClick={() => setMenuOpen(false)}>
                     <button className='w-full text-xs text-[#6B5C4E] px-3 py-2 rounded-lg hover:bg-[#D9CBBF] hover:text-[#2C2416] transition-all duration-150 text-left'>
                       Log in
                     </button>
