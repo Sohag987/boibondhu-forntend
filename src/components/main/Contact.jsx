@@ -51,9 +51,9 @@ const Contact = () => {
         {/* Left — info */}
         <div className='flex flex-col gap-4 lg:w-64 shrink-0'>
           {[
-            { title: 'Email',    value: 'hello@boibondhu.com', sub: 'We reply within 24 hours'    },
-            { title: 'WhatsApp', value: '+880 1XXX-XXXXXX',    sub: 'Sat – Thu, 9am – 6pm'        },
-            { title: 'Location', value: 'Dhaka, Bangladesh',   sub: 'Serving readers nationwide'  },
+            { title: 'Email',    value: 'boibondhu999@gmail.com', sub: 'We reply within 24 hours'    },
+            { title: 'WhatsApp', value: '+8801575822635',    sub: 'Sat – Thu, 9am – 6pm'        },
+            { title: 'Location', value: 'Rajshahi, Bangladesh',   sub: 'Serving readers nationwide'  },
           ].map((info) => (
             <div key={info.title} className='bg-[#EDE4D8] border border-[#C8B9A8] rounded-xl p-4 flex flex-col gap-1'>
               <p className='text-[#8C7B6E] text-xs'>{info.title}</p>
