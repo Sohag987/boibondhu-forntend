@@ -22,8 +22,8 @@ const values = [
 
 const team = [
   { name: 'Sohag Mondal',   role: 'Founder&CEO' },
-  { name: 'Sohag Mondal',  role: 'Community Manager'   },
-  { name: 'Sohag Mondal', role: 'Design Lead'},
+  { name: 'Jibon & Neloy',  role: 'Community Manager'   },
+  { name: 'Jibon & Neloy', role: 'Design Lead'},
 ]
 
 const About = () => {
